@@ -66,15 +66,20 @@ attacker = GCG(
     attack_model=model,
     target_model=model,
     jailbreak_datasets=dataset,
-    max_num_iter=100,
-    batchsize=8,
+    max_num_iter=200,
+    batchsize=16,
 )
 
 # Finally, start jailbreaking.
 # raise
-dataset = attacker.single_attack(dataset[1])
+dataset = attacker.single_attack(dataset[2])
 
 # attacker.attack()
 
 # %%
-print(dataset[0])
+# print(dataset[0])
+print(dataset[0]["jailbreak_prompt"].replace("{query}", dataset[0]["query"]))
+print(dataset[0]["query"])
+# print(dataset[0]["jailbreak_response"])
+
+# %%

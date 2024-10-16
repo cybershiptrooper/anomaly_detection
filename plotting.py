@@ -41,16 +41,22 @@ def plot_per_token_dot_product(dot_products, token_ids, tokenizer):
 # Example usage:
 # plot_per_token_dot_product(dot_products, input_ids_harmful, tokenizer)
 
+from functools import partial
 
-def plot_per_token_dot_product_plt(dot_products, token_ids, tokenizer):
+
+def plot_per_token_dot_product_plt(
+    dot_products, token_ids, tokenizer, reduction: callable = partial(np.mean, axis=0)
+):
     # Convert token IDs to tokens
-    tokens = [tokenizer.decode([id]) for id in token_ids]
+    # tokens = [tokenizer.decode([id]) for id in token_ids]
 
     # Create a list of layer names
     layers = list(dot_products.keys())
 
     # Create a 2D array of dot products
-    dot_product_array = np.array([dot_products[layer].cpu().to(float).numpy() for layer in layers])
+    dot_product_array = np.array(
+        [reduction(dot_products[layer].cpu().to(float).numpy()) for layer in layers]
+    )
 
     # Create the heatmap
     plt.figure(figsize=(10, 8))
